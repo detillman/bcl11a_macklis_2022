@@ -5,6 +5,6 @@ GEO contains all raw (fastq inputs), processed (HaplotypeCaller and FeatureCount
 
 To turn raw files into processed files, use the scripts in bcl11a_fastqs_to_counts_and_variants, following the instructions in workflow.txt. 
 
-R scripts for data analysis and visualization of processed files are in bcl11a_analysis_and_visualization. 
+R markdowns for data analysis and visualization of processed files are in bcl11a_analysis_and_visualization. 
 
 Refer to our publication for additional information: 
