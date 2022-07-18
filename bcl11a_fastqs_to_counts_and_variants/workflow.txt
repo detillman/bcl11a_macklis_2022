@@ -1,0 +1,19 @@
+01. wget ensembl dna and gtf and vcf (https://useast.ensembl.org/info/data/ftp/index.html)
+02. gunzip gtf and process in R -> exome.bed
+03. wget Picard (https://github.com/broadinstitute/picard/releases/)
+04. sbatch 1_script_picard_createSequenceDictionary.run
+05. sbatch 2_script_picard_bedToIntervalList.run
+06. sbatch 3_script_star_index.run
+07. bash 4_wrapper_star_align.sh
+08. bash 5_wrapper_picard_markDuplicates.sh
+09. sbatch 6_script_samtools_faidx.run
+10. wget GATK (https://github.com/broadinstitute/gatk/releases)
+11. bash 7_wrapper_gatk_splitNcigarReads.sh 
+12. bash 8_wrapper_picard_addOrReplaceReadGroups.sh
+13. sbatch 9_script_gatk_indexFeatureFile.run
+14. bash 10_wrapper_gatk_baseRecalibrator.sh
+15. bash 11_wrapper_gatk_applyBQSR.sh
+16. bash 12_wrapper_gatk_haplotypeCaller.sh
+17. bash 13_wrapper_gatk_variantFiltration.sh
+18. bash 14_wrapper_gatk_variantsToTable.sh
+19. bash 15_wrapper_subread_featureCounts.sh

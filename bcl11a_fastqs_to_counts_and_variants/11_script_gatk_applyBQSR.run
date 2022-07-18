@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:22
+#SBATCH -c 4
+#SBATCH --mem 4G
+#SBATCH --job-name gatk_applyBQSR
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+module load Java/1.8
+export PATH=`pwd`/gatk-4.2.5.0:$PATH
+
+NAME=${1}
+
+gatk ApplyBQSR \
+   -R Mus_musculus.GRCm39.dna.primary_assembly.fa \
+   -I ${NAME}_readGroups.split.markedDupes.Aligned.sortedByCoord.out.bam \
+   --bqsr-recal-file ${NAME}_recal.table \
+   -O ${NAME}_recalibrated.readGroups.split.markedDupes.Aligned.sortedByCoord.out.bam \
+   --add-output-sam-program-record \
+   --use-original-qualities

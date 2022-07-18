@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:25
+#SBATCH -c 3
+#SBATCH --mem 47G
+#SBATCH --job-name picard_markDuplicates
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+module load Java/1.8
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+NAME=${1}
+
+java -jar picard.jar MarkDuplicates \
+      I=${NAME}Aligned.sortedByCoord.out.bam \
+      O=${NAME}markedDupes.Aligned.sortedByCoord.out.bam \
+      M=${NAME}markedDupeMetrics.txt \
+      READ_NAME_REGEX=null \
+      VALIDATION_STRINGENCY=SILENT \
+      CREATE_INDEX=true

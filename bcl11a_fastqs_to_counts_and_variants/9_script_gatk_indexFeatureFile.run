@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:05
+#SBATCH -c 3
+#SBATCH --mem 21G
+#SBATCH --job-name gatk_indexFeatureFile
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+module load Java/1.8
+export PATH=`pwd`/gatk-4.2.5.0:$PATH
+
+gatk IndexFeatureFile \
+     -I mus_musculus.vcf

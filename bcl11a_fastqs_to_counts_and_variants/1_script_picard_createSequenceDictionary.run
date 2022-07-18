@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:01
+#SBATCH -c 3
+#SBATCH --mem 20G
+#SBATCH --job-name picard_createSequenceDictionary
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+module load Java/1.8
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+java -jar picard.jar CreateSequenceDictionary \
+      R=Mus_musculus.GRCm39.dna.primary_assembly.fa \
+      O=Mus_musculus.GRCm39.dna.primary_assembly.dict

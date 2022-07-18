@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:15
+#SBATCH -c 4
+#SBATCH --mem 65G
+#SBATCH --job-name star_align
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+NAME=${1}
+
+module load STAR/2.7.0e-fasrc01
+
+STAR --runThreadN 4 \
+--genomeDir genomeDir \
+--readFilesIn ${NAME}R1.fq.gz ${NAME}R2.fq.gz \
+--outFileNamePrefix ${NAME} \
+--readFilesCommand gunzip -c \
+--outSAMtype BAM SortedByCoordinate \
+--twopassMode Basic

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-03:00
+#SBATCH -c 3
+#SBATCH --mem 7G
+#SBATCH --job-name gatk_haplotypeCaller
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+module load Java/1.8
+export PATH=`pwd`/gatk-4.2.5.0:$PATH
+
+NAME=${1}
+
+gatk --java-options "-Xmx4g" HaplotypeCaller  \
+   -R Mus_musculus.GRCm39.dna.primary_assembly.fa \
+   -I ${NAME}_recalibrated.readGroups.split.markedDupes.Aligned.sortedByCoord.out.bam \
+   -O ${NAME}_haplotypes.g.vcf.gz \
+   -L exome.interval_list \
+   --dont-use-soft-clipped-bases \
+   --standard-min-confidence-threshold-for-calling 20.0 \
+   -D mus_musculus.vcf

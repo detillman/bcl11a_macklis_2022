@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:20
+#SBATCH -c 3
+#SBATCH --mem 1G
+#SBATCH --job-name picard_addOrReplaceReadGroups
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+NAME=${1}
+
+module load Java/1.8
+java -jar picard.jar AddOrReplaceReadGroups \
+       I=${NAME}_split.markedDupes.Aligned.sortedByCoord.out.bam \
+       O=${NAME}_readGroups.split.markedDupes.Aligned.sortedByCoord.out.bam \
+       RGID=1200or1201 \
+       RGLB=library \
+       RGPL=ILLUMINA \
+       RGPU=barcode_1200or1201_${NAME}barcode \
+       RGSM=${NAME}

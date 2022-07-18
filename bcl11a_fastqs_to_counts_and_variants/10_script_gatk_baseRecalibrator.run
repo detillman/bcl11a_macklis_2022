@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:20
+#SBATCH -c 3
+#SBATCH --mem 9G
+#SBATCH --job-name gatk_baseRecalibrator
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+module load Java/1.8
+export PATH=`pwd`/gatk-4.2.5.0:$PATH
+
+NAME=${1}
+
+gatk BaseRecalibrator \
+   -I ${NAME}_readGroups.split.markedDupes.Aligned.sortedByCoord.out.bam \
+   -R Mus_musculus.GRCm39.dna.primary_assembly.fa \
+   --known-sites mus_musculus.vcf \
+   -O ${NAME}_recal.table \
+   --use-original-qualities

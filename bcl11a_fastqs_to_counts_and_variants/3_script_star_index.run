@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:50
+#SBATCH -c 15
+#SBATCH --mem 62G
+#SBATCH --job-name star_index
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+module load STAR/2.7.0e-fasrc01
+
+STAR --runThreadN 15 \
+--runMode genomeGenerate \
+--genomeDir genomeDir \
+--genomeFastaFiles Mus_musculus.GRCm39.dna.primary_assembly.fa \
+--sjdbGTFfile Mus_musculus.GRCm39.105.gtf \
+--sjdbOverhang 99 #theoretically max(readLength) - 1, but 99 is fine

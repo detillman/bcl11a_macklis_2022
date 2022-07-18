@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:01
+#SBATCH -c 3
+#SBATCH --mem 1G
+#SBATCH --job-name picard_bedToIntervalList
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+module load Java/1.8
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+awk '{print $1 "\t" ($2 - 1) "\t" $3}' exome.bed > exome.fixed.bed
+
+java -jar picard.jar BedToIntervalList \
+      I=exome.fixed.bed \
+      O=exome.interval_list \
+      SD=Mus_musculus.GRCm39.dna.primary_assembly.dict

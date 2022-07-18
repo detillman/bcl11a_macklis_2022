@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:01
+#SBATCH -c 3
+#SBATCH --mem 1G
+#SBATCH --job-name samtools_faidx
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+module load samtools/1.10-fasrc01
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+samtools faidx Mus_musculus.GRCm39.dna.primary_assembly.fa

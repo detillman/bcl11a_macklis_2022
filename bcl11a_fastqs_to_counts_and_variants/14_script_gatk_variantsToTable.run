@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:01
+#SBATCH -c 3
+#SBATCH --mem 1G
+#SBATCH --job-name gatk_variantsToTable
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+module load Java/1.8
+export PATH=`pwd`/gatk-4.2.5.0:$PATH
+
+NAME=${1}
+
+gatk VariantsToTable \
+     -V ${NAME}_filtered.haplotypes.g.vcf.gz \
+     -F CHROM -F POS -F TYPE -F REF -F ALT -GF AD \
+     -O ${NAME}_filtered.haplotypes.table

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:10
+#SBATCH -c 3
+#SBATCH --mem 2G
+#SBATCH --job-name subread_featureCounts
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+NAME=${1}
+
+module load subread/1.5.1-fasrc01
+
+featureCounts -p -T 3 \
+   -a Mus_musculus.GRCm39.105.gtf \
+   -t exon \
+   -g gene_id \
+   -o ${NAME}_counts.txt \
+   ${NAME}_recalibrated.readGroups.split.markedDupes.Aligned.sortedByCoord.out.bam
+ 

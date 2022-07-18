@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-00:01
+#SBATCH -c 3
+#SBATCH --mem 3G
+#SBATCH --job-name gatk_variantFiltration
+#SBATCH -o %j.out
+#SBATCH -e %j.err
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+module load Java/1.8
+export PATH=`pwd`/gatk-4.2.5.0:$PATH
+
+NAME=${1}
+
+gatk VariantFiltration \
+   -R Mus_musculus.GRCm39.dna.primary_assembly.fa \
+   -V ${NAME}_haplotypes.g.vcf.gz \
+   -O ${NAME}_filtered.haplotypes.g.vcf.gz \
+   -window 35 \
+   -cluster 3 \
+   -filter "QD < 2.0" --filter-name "QD_filter" \
+   -filter "FS > 30.0" --filter-name "FS_filter" \
