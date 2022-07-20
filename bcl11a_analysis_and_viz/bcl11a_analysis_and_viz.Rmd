@@ -1184,117 +1184,134 @@ het_exclude_sigWT <- het_excludeShrink_plot %>%
   filter(significant == T, direction == "Depleted",
          gene_type == "protein-coding")
 
-# # GO enrichment for GCs (maybe remove?)
-# het_exclude_goAll <- enrichGO(gene = het_exclude_sigAll$ensembl_id,
-#                              OrgDb = org.Mm.eg.db,
-#                              keyType = "ENSEMBL",
-#                              ont = "ALL",
-#                              pAdjustMethod = "BH",
-#                              readable = T,
-#                              pool = F,
-#                              universe = het_excludeShrink_plot$ensembl_id)
-# het_exclude_goNull <- enrichGO(gene = het_exclude_sigNull$ensembl_id,
-#                              OrgDb = org.Mm.eg.db,
-#                              keyType = "ENSEMBL",
-#                              ont = "ALL",
-#                              pAdjustMethod = "BH",
-#                              readable = T,
-#                              pool = F,
-#                              universe = het_excludeShrink_plot$ensembl_id)
-# het_exclude_goWT <- enrichGO(gene = het_exclude_sigWT$ensembl_id,
-#                              OrgDb = org.Mm.eg.db,
-#                              keyType = "ENSEMBL",
-#                              ont = "ALL",
-#                              pAdjustMethod = "BH",
-#                              readable = T,
-#                              pool = F,
-#                              universe = het_excludeShrink_plot$ensembl_id)
-# dotplot(het_exclude_goAll) + boldBlack_theme() +
-#   ggtitle("GO Enrichment: Excluded GCs, Up/Down in Null")
-# dotplot(het_exclude_goNull) + boldBlack_theme() +
-#   ggtitle("GO Enrichment: Excluded GCs, Up in Null")
-# dotplot(het_exclude_goWT) + boldBlack_theme() +
-#   ggtitle("GO Enrichment: Excluded GCs, Down in Null")
-# 
-# # reducing go term lists based on semantic similarity with revigo
-# gcAll_test <- as.data.frame(het_exclude_goAll)
-# gcAll_test$pvalue <- format(gcAll_test$pvalue, scientific = F)
-# write.table(gcAll_test %>% select(ID, pvalue), file = "gcAll_GO.txt",
-#             row.names = F, col.names = F, quote = F)
-# gcAll_revi <- read.table("Revigo_gcAllBP.tsv", header = T) %>%
-#     select(-contains("PC")) %>%
-#   full_join(read.table("Revigo_gcAllCC.tsv", header = T) %>%
-#                 select(-contains("PC"))) %>%
-#   full_join(read.table("Revigo_gcAllMF.tsv", header = T) %>%
-#                 select(-contains("PC"))) %>%
-#   filter(Dispensability < 0.7) %>%
-#   rename(ID = TermID) %>%
-#   left_join(gcAll_test, by = "ID") %>%
-#   separate(GeneRatio, into = c("GeneNum", "GeneDenom")) %>%
-#   mutate(GeneRatio = as.numeric(GeneNum) / as.numeric(GeneDenom))
-# ggplot(gcAll_revi %>%
-#        mutate(Description = fct_reorder2(Description,
-#                                          GeneRatio,
-#                                          -GeneRatio)) %>%
-#          slice(1:10), aes(x = GeneRatio,
-#                           y = Description,
-#                       size = Count,
-#                       color = p.adjust)) +
-#   geom_point() + theme_classic(base_size = 8, base_family = "sans") +
-#   scale_size_continuous(range = c(0.25, 2.5)) + ylab("") +
-#     scale_color_distiller(palette = "RdYlBu")
-# gcNull_test <- as.data.frame(het_exclude_goNull)
-# gcNull_test$pvalue <- format(gcNull_test$pvalue, scientific = F)
-# write.table(gcNull_test %>% select(ID, pvalue), file = "gcNull_GO.txt",
-#             row.names = F, col.names = F, quote = F)
-# gcNull_revi <- read.table("Revigo_gcNullBP.tsv", header = T) %>%
-#     select(-contains("PC")) %>%
-#   full_join(read.table("Revigo_gcNullCC.tsv", header = T) %>%
-#                 select(-contains("PC"))) %>%
-#   full_join(read.table("Revigo_gcNullMF.tsv", header = T) %>%
-#                 select(-contains("PC"))) %>%
-#   filter(Dispensability < 0.7) %>%
-#   rename(ID = TermID) %>%
-#   left_join(gcNull_test, by = "ID") %>%
-#   separate(GeneRatio, into = c("GeneNum", "GeneDenom")) %>%
-#   mutate(GeneRatio = as.numeric(GeneNum) / as.numeric(GeneDenom))
-# ggplot(gcNull_revi %>%
-#        mutate(Description = fct_reorder2(Description,
-#                                          GeneRatio,
-#                                          -GeneRatio)) %>%
-#          slice(1:10), aes(x = GeneRatio,
-#                           y = Description,
-#                       size = Count,
-#                       color = p.adjust)) +
-#   geom_point() + theme_classic(base_size = 8, base_family = "sans") +
-#   scale_size_continuous(range = c(0.25, 2.5)) + ylab("") +
-#     scale_color_distiller(palette = "RdYlBu")
-# gcWT_test <- as.data.frame(het_exclude_goWT)
-# gcWT_test$pvalue <- format(gcWT_test$pvalue, scientific = F)
-# write.table(gcWT_test %>% select(ID, pvalue), file = "gcWT_GO.txt",
-#             row.names = F, col.names = F, quote = F)
-# gcWT_revi <- read.table("Revigo_gcWTBP.tsv", header = T) %>%
-#     select(-contains("PC")) %>%
-#   full_join(read.table("Revigo_gcWTCC.tsv", header = T) %>%
-#                 select(-contains("PC"))) %>%
-#   full_join(read.table("Revigo_gcWTMF.tsv", header = T) %>%
-#                 select(-contains("PC"))) %>%
-#   filter(Dispensability < 0.7) %>%
-#   rename(ID = TermID) %>%
-#   left_join(gcWT_test, by = "ID") %>%
-#   separate(GeneRatio, into = c("GeneNum", "GeneDenom")) %>%
-#   mutate(GeneRatio = as.numeric(GeneNum) / as.numeric(GeneDenom))
-# ggplot(gcWT_revi %>%
-#        mutate(Description = fct_reorder2(Description,
-#                                          GeneRatio,
-#                                          -GeneRatio)) %>%
-#          slice(1:10), aes(x = GeneRatio,
-#                           y = Description,
-#                       size = Count,
-#                       color = p.adjust)) +
-#   geom_point() + theme_classic(base_size = 8, base_family = "sans") +
-#   scale_size_continuous(range = c(0.25, 2.5)) + ylab("") +
-#     scale_color_distiller(palette = "RdYlBu")
+# GO enrichment for GCs
+het_exclude_goAll <- enrichGO(gene = het_exclude_sigAll$ensembl_id,
+                             OrgDb = org.Mm.eg.db,
+                             keyType = "ENSEMBL",
+                             ont = "ALL",
+                             pAdjustMethod = "BH",
+                             readable = T,
+                             pool = F,
+                             universe = het_excludeShrink_plot$ensembl_id)
+het_exclude_goNull <- enrichGO(gene = het_exclude_sigNull$ensembl_id,
+                             OrgDb = org.Mm.eg.db,
+                             keyType = "ENSEMBL",
+                             ont = "ALL",
+                             pAdjustMethod = "BH",
+                             readable = T,
+                             pool = F,
+                             universe = het_excludeShrink_plot$ensembl_id)
+het_exclude_goWT <- enrichGO(gene = het_exclude_sigWT$ensembl_id,
+                             OrgDb = org.Mm.eg.db,
+                             keyType = "ENSEMBL",
+                             ont = "ALL",
+                             pAdjustMethod = "BH",
+                             readable = T,
+                             pool = F,
+                             universe = het_excludeShrink_plot$ensembl_id)
+dotplot(het_exclude_goAll) + boldBlack_theme() +
+  ggtitle("GO Enrichment: Excluded GCs, Up/Down in Null")
+dotplot(het_exclude_goNull) + boldBlack_theme() +
+  ggtitle("GO Enrichment: Excluded GCs, Up in Null")
+dotplot(het_exclude_goWT) + boldBlack_theme() +
+  ggtitle("GO Enrichment: Excluded GCs, Down in Null")
+
+# reducing go term lists based on semantic similarity with revigo
+gcAll_test <- as.data.frame(het_exclude_goAll)
+gcAll_test$pvalue <- format(gcAll_test$pvalue, scientific = F)
+write.table(gcAll_test %>% select(ID, pvalue), file = "gcAll_GO.txt",
+            row.names = F, col.names = F, quote = F)
+gcAll_revi <- read.table("Revigo_gcAllBP.tsv", header = T) %>%
+    select(-contains("PC")) %>%
+  full_join(read.table("Revigo_gcAllCC.tsv", header = T) %>%
+                select(-contains("PC"))) %>%
+  full_join(read.table("Revigo_gcAllMF.tsv", header = T) %>%
+                select(-contains("PC"))) %>%
+  filter(Dispensability < 0.7) %>%
+  rename(ID = TermID) %>%
+  left_join(gcAll_test, by = "ID") %>%
+  separate(GeneRatio, into = c("GeneNum", "GeneDenom")) %>%
+  mutate(GeneRatio = as.numeric(GeneNum) / as.numeric(GeneDenom))
+
+# fig 3 supp fig 2 e: go enrichment of all DAGs
+real_fig_3_supp_2e <- ggplot(gcAll_revi %>%
+       mutate(Description = fct_reorder2(Description,
+                                         GeneRatio,
+                                         -GeneRatio)) %>%
+         slice(1:10), aes(x = GeneRatio,
+                          y = Description,
+                      size = Count,
+                      color = p.adjust)) +
+  labs(x = bquote(Gene~Ratio),
+       color = bquote(q-value),
+       size = bquote(Count)) +
+  geom_point() + theme_classic(base_size = 4, base_family = "sans") +
+  scale_size_continuous(range = c(0.25, 2.5)) + ylab("") +
+    scale_color_distiller(palette = "RdYlBu") +
+  theme(legend.position = c(0.775, 0.7),
+        legend.background = element_rect(fill = NA),
+        legend.title = element_text(size = 4),
+          legend.text = element_text(size = 4),
+        legend.spacing.x = unit(0.0002, "in"),
+          legend.spacing.y = unit(0.01, "in"),
+        axis.text.x = element_text(color = "black"),
+          axis.text.y = element_text(color = "black"),
+          axis.ticks = element_line(color = "black")); real_fig_3_supp_2e
+ggsave("real_fig_3_supp_2e.pdf", plot = real_fig_3_supp_2e, units = "in",
+       height = 1.75, width = 1.75) # 1 inch = 72 pt
+
+gcNull_test <- as.data.frame(het_exclude_goNull)
+gcNull_test$pvalue <- format(gcNull_test$pvalue, scientific = F)
+write.table(gcNull_test %>% select(ID, pvalue), file = "gcNull_GO.txt",
+            row.names = F, col.names = F, quote = F)
+gcNull_revi <- read.table("Revigo_gcNullBP.tsv", header = T) %>%
+    select(-contains("PC")) %>%
+  full_join(read.table("Revigo_gcNullCC.tsv", header = T) %>%
+                select(-contains("PC"))) %>%
+  full_join(read.table("Revigo_gcNullMF.tsv", header = T) %>%
+                select(-contains("PC"))) %>%
+  filter(Dispensability < 0.7) %>%
+  rename(ID = TermID) %>%
+  left_join(gcNull_test, by = "ID") %>%
+  separate(GeneRatio, into = c("GeneNum", "GeneDenom")) %>%
+  mutate(GeneRatio = as.numeric(GeneNum) / as.numeric(GeneDenom))
+ggplot(gcNull_revi %>%
+       mutate(Description = fct_reorder2(Description,
+                                         GeneRatio,
+                                         -GeneRatio)) %>%
+         slice(1:10), aes(x = GeneRatio,
+                          y = Description,
+                      size = Count,
+                      color = p.adjust)) +
+  geom_point() + theme_classic(base_size = 8, base_family = "sans") +
+  scale_size_continuous(range = c(0.25, 2.5)) + ylab("") +
+    scale_color_distiller(palette = "RdYlBu")
+gcWT_test <- as.data.frame(het_exclude_goWT)
+gcWT_test$pvalue <- format(gcWT_test$pvalue, scientific = F)
+write.table(gcWT_test %>% select(ID, pvalue), file = "gcWT_GO.txt",
+            row.names = F, col.names = F, quote = F)
+gcWT_revi <- read.table("Revigo_gcWTBP.tsv", header = T) %>%
+    select(-contains("PC")) %>%
+  full_join(read.table("Revigo_gcWTCC.tsv", header = T) %>%
+                select(-contains("PC"))) %>%
+  full_join(read.table("Revigo_gcWTMF.tsv", header = T) %>%
+                select(-contains("PC"))) %>%
+  filter(Dispensability < 0.7) %>%
+  rename(ID = TermID) %>%
+  left_join(gcWT_test, by = "ID") %>%
+  separate(GeneRatio, into = c("GeneNum", "GeneDenom")) %>%
+  mutate(GeneRatio = as.numeric(GeneNum) / as.numeric(GeneDenom))
+ggplot(gcWT_revi %>%
+       mutate(Description = fct_reorder2(Description,
+                                         GeneRatio,
+                                         -GeneRatio)) %>%
+         slice(1:10), aes(x = GeneRatio,
+                          y = Description,
+                      size = Count,
+                      color = p.adjust)) +
+  geom_point() + theme_classic(base_size = 8, base_family = "sans") +
+  scale_size_continuous(range = c(0.25, 2.5)) + ylab("") +
+    scale_color_distiller(palette = "RdYlBu")
 
 # SFARI enrichment
 sfari_enrich <- mouse_symbols %>%
@@ -1373,7 +1390,7 @@ het_excludeShrink_somata_plot <- het_excludeShrink_plot %>%
   
 # table 1: gc and soma differential expression (wt vs null)
 write.csv(x = het_excludeShrink_somata_plot, 
-          file = "exclude_nullVSwt_062522_pt0001ambient_pt05deseq.csv", 
+          file = "table1.csv", 
           row.names = F)
 
 test <- fig_3b_labels_colors %>%
@@ -1540,11 +1557,11 @@ pou <- read.csv("pou.csv") %>%
 bcl11a_dags <- sig_fig_3b_labels_colors %>%
   distinct(ensembl_id)
 
-# fig 3, supp fig 2 e: venn diagram of DAGs compared to other GC molecules
+# fig 3, supp fig 2 f: venn diagram of DAGs compared to other GC molecules
 venn.diagram(x = list(stupid$ensembl_id, pou$ENSG, 
                       bcl11a_dags$ensembl_id),
              category.names = c("stupid", "pou", "bcl11a_dags"),
-             filename = "real_fig_3_supp_2e.png",
+             filename = "real_fig_3_supp_2f.png",
              output = T)
 ```
 
