@@ -1,3 +1,4 @@
+00. sbatch 0_script_trimmomatic_trim.run
 01. wget ensembl dna and gtf and vcf (https://useast.ensembl.org/info/data/ftp/index.html)
 02. gunzip gtf and process in R -> exome.bed
 03. wget Picard (https://github.com/broadinstitute/picard/releases/)
