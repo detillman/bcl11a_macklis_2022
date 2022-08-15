@@ -1,0 +1,37 @@
+#!/bin/bash
+
+#SBATCH -p shared
+#SBATCH -t 0-06:00
+#SBATCH -c 8
+#SBATCH --mem 32G
+#SBATCH -o %j.out  
+#SBATCH -e %j.err
+
+module load jdk/1.8.0_172-fasrc01
+module load fastqc/0.11.8-fasrc01
+
+cd /n/holyscratch01/macklis_lab/dtillman/ambient/working
+
+# For loop to concatenate files
+for i in {1..22}
+do
+cat sample"$i"_181211_L001_R1_001.fastq.gz sample"$i"_181211_L002_R1_001.fastq.gz sample"$i"_181212_L001_R1_001.fastq.gz sample"$i"_181212_L002_R1_001.fastq.gz  > sample"$i"_combined_R1.fastq.gz
+cat sample"$i"_181211_L001_R2_001.fastq.gz sample"$i"_181211_L002_R2_001.fastq.gz sample"$i"_181212_L001_R2_001.fastq.gz sample"$i"_181212_L002_R2_001.fastq.gz  > sample"$i"_combined_R2.fastq.gz
+done
+
+# For loop to run Trimmomatic
+echo "Running Trimmomatic..."
+for i in {1..22}
+do
+java -jar Trimmomatic-0.39/trimmomatic-0.39.jar PE -version -threads 8 -phred33 \
+sample"$i"_combined_R1.fastq.gz sample"$i"_combined_R2.fastq.gz \
+sample"$i"_combined_R1_paired_qualtrim25_minlen35.fq.gz \
+sample"$i"_combined_R1_unpaired_qualtrim25_minlen35.fq.gz \
+sample"$i"_combined_R2_paired_qualtrim25_minlen35.fq.gz \
+sample"$i"_combined_R2_unpaired_qualtrim25_minlen35.fq.gz \
+LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:35
+done
+
+# Run FastQC on all trimmed files
+echo "Running FastQC..."
+fastqc *minlen35.fq.gz -o trimmed_fastqc_files
