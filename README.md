@@ -7,4 +7,4 @@ To turn raw files into processed files, use the scripts in bcl11a_fastqs_to_coun
 
 An R Markdown and miscellaneous files for data analysis and visualization of processed files is in bcl11a_analysis_and_viz. 
 
-Refer to our publication for additional information: 
+Refer to our preprint for additional information: https://doi.org/10.1101/2022.10.06.511159
