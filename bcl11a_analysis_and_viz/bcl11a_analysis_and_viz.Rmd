@@ -141,6 +141,16 @@ boldBlack_theme <- function(base_size = 12, base_family = "") {
     )
 }
 ```
+## Getting Exome from GTF
+
+```{r gtfExome, include = F}
+# gtf <- read.table("Mus_musculus.GRCm39.105.gtf", sep = "\t")
+# gtf_exome <- subset(gtf, V3 == "exon")
+# write.table(data.frame(chrom=gtf[,'V1'], 
+#                        start=gtf[,'V4'], 
+#                        end=gtf[,'V5']), 
+#             "exome.bed", quote = F, sep="\t", col.names = F, row.names = F)
+```
 
 ## Loading in HaplotypeCaller Output
 
