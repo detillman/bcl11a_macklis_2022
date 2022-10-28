@@ -678,7 +678,7 @@ gene_samples <- gene_samples %>%
          adj_ambience = case_when(p.adjust < 0.0001 ~ "real",
                               TRUE ~ "ambient"))
 
-# exclusion list for genes with "bad" snps in > 4/6 samples
+# exclusion list for genes with "bad" snps in > 2/6 samples
 ensembl_percents <- gene_samples %>%
   pivot_wider(names_from = sample, values_from = p.adjust,
               names_prefix = "number_") %>%
