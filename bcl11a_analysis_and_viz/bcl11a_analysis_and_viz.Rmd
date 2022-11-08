@@ -1398,13 +1398,21 @@ het_excludeShrink_somata_plot <- het_excludeShrink_plot %>%
   filter(label_keep == "yes") %>%
   left_join(somata_hetShrink_plot, by = "ensembl_id")
   
-# table 1: gc and soma differential expression (wt vs null)
-write.csv(x = het_excludeShrink_somata_plot, 
-          file = "table1.csv", 
+# supplementary table 1: gc and soma deseq2 results
+real_table_supp_1 <- het_excludeShrink_plot %>%
+                   full_join(somata_hetShrink_plot %>%
+                               select(ensembl_id, baseMean, log2FoldChange, 
+                                      lfcSE, pvalue, padj, significant,
+                                      direction), 
+                             by = "ensembl_id") %>%
+  filter(ensembl_id != "ENSMUSG00000117786") %>%
+  select(-label, -contains("number_"), -contains("sfari"), -contains("id_"))
+colnames(real_table_supp_1) <- sub("\\.x", "\\.gc", 
+                                   colnames(real_table_supp_1))
+colnames(real_table_supp_1) <- sub("\\.y", "\\.soma", 
+                                   colnames(real_table_supp_1))
+write.csv(real_table_supp_1, file = "real_table_supp_1.csv",
           row.names = F)
-
-test <- fig_3b_labels_colors %>%
-                   left_join(somata_hetShrink_plot, by = "ensembl_id")
 
 # fig 3c: quadrant plot of DAGs colored by SFARI status
 real_fig_3c <- ggplot(fig_3b_labels_colors %>%
