@@ -1647,7 +1647,8 @@ trans_utr3_enriched <- read.table("trans_utrs_3_pt5/motifs_Enriched.txt",
 
 ## THE END
 
-```{r theEnd, eval = F}
+```{r theEnd}
 # THE END
+sessionInfo()
 ```
 
