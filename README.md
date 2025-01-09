@@ -3,9 +3,11 @@ RNA-seq and variant calling of CPN somata and GCs that are wild-type, Bcl11a-het
 
 GEO contains all raw (fastq inputs), processed (HaplotypeCaller/FeatureCount outputs), and metadata files: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE211405
 
-To turn raw files into processed files, use the scripts in bcl11a_fastqs_to_counts_and_variants, following the instructions in workflow.txt. 
+To turn raw files into processed files, use the scripts in bcl11a_fastqs_to_counts_and_variants, following the instructions in workflow.txt.
+Expected Run Time: 1-2 days
 
-An R Markdown and miscellaneous files for data analysis and visualization of processed files is in bcl11a_analysis_and_viz. 
+An R Markdown and miscellaneous files for data analysis and visualization of processed files is in bcl11a_analysis_and_viz.
+Expected Run Time: 1-2 hours
 
 Refer to our preprint for additional information: https://doi.org/10.1101/2022.10.06.511159
 
