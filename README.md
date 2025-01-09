@@ -8,3 +8,11 @@ To turn raw files into processed files, use the scripts in bcl11a_fastqs_to_coun
 An R Markdown and miscellaneous files for data analysis and visualization of processed files is in bcl11a_analysis_and_viz. 
 
 Refer to our preprint for additional information: https://doi.org/10.1101/2022.10.06.511159
+
+Software Dependencies:
+Trimmomatic (> v0.39)
+STAR (> v2.70e)
+FeatureCounts (> v1.5.1)
+GATK Haplotype Caller (> v4.2.5.0)
+DESeq2 (> v1.38.0)
+ClusterProfiler (> v4.6.0)
